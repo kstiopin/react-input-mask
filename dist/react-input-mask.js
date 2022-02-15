@@ -1355,6 +1355,10 @@
     };
   }
   function isInputFocused(input) {
+    if (!input) {
+      return false;
+    }
+
     var inputDocument = input.ownerDocument;
     return inputDocument.hasFocus() && inputDocument.activeElement === input;
   }
