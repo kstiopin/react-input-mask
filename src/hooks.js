@@ -74,6 +74,10 @@ function useSelection(inputRef, isMasked) {
 
   const getSelection = useCallback(() => {
     const input = getInputElement();
+    if (!input) {
+      return;
+    }
+
     return getInputSelection(input);
   }, [getInputElement]);
 

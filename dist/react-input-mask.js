@@ -1469,6 +1469,11 @@
     var getInputElement = useInputElement(inputRef);
     var getSelection = React.useCallback(function () {
       var input = getInputElement();
+
+      if (!input) {
+        return;
+      }
+
       return getInputSelection(input);
     }, [getInputElement]);
     var getLastSelection = React.useCallback(function () {
