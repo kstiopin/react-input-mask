@@ -147,7 +147,11 @@ const InputMask = forwardRef(function InputMask(props, forwardedRef) {
     const { value } = getInputState();
     const inputDocument = getElementDocument(input);
 
-    if (!isInputFocused(input) && !maskUtils.isValueFilled(value)) {
+    if (
+      inputDocument &&
+      !isInputFocused(input) &&
+      !maskUtils.isValueFilled(value)
+    ) {
       const mouseDownX = event.clientX;
       const mouseDownY = event.clientY;
       const mouseDownTime = new Date().getTime();

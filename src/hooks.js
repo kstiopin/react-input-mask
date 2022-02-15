@@ -110,16 +110,20 @@ function useSelection(inputRef, isMasked) {
     }
 
     const input = getInputElement();
-    input.addEventListener("focus", runSelectionLoop);
-    input.addEventListener("blur", stopSelectionLoop);
+    if (input) {
+      input.addEventListener("focus", runSelectionLoop);
+      input.addEventListener("blur", stopSelectionLoop);
+    }
 
     if (isInputFocused(input)) {
       runSelectionLoop();
     }
 
     return () => {
-      input.removeEventListener("focus", runSelectionLoop);
-      input.removeEventListener("blur", stopSelectionLoop);
+      if (input) {
+        input.removeEventListener("focus", runSelectionLoop);
+        input.removeEventListener("blur", stopSelectionLoop);
+      }
 
       stopSelectionLoop();
     };

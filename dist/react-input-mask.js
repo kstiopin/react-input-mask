@@ -1496,16 +1496,22 @@
       }
 
       var input = getInputElement();
-      input.addEventListener("focus", runSelectionLoop);
-      input.addEventListener("blur", stopSelectionLoop);
+
+      if (input) {
+        input.addEventListener("focus", runSelectionLoop);
+        input.addEventListener("blur", stopSelectionLoop);
+      }
 
       if (isInputFocused(input)) {
         runSelectionLoop();
       }
 
       return function () {
-        input.removeEventListener("focus", runSelectionLoop);
-        input.removeEventListener("blur", stopSelectionLoop);
+        if (input) {
+          input.removeEventListener("focus", runSelectionLoop);
+          input.removeEventListener("blur", stopSelectionLoop);
+        }
+
         stopSelectionLoop();
       };
     });
@@ -2232,7 +2238,7 @@
 
       var inputDocument = getElementDocument(input);
 
-      if (!isInputFocused(input) && !maskUtils.isValueFilled(value)) {
+      if (inputDocument && !isInputFocused(input) && !maskUtils.isValueFilled(value)) {
         var mouseDownX = event.clientX;
         var mouseDownY = event.clientY;
         var mouseDownTime = new Date().getTime();
