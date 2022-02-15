@@ -18,17 +18,18 @@ import ChildrenWrapper from "./children-wrapper";
 const InputMask = forwardRef(function InputMask(props, forwardedRef) {
   const {
     alwaysShowMask,
+    beforeMaskedStateChange,
     children,
+    formatChars,
     mask,
     maskPlaceholder,
-    beforeMaskedStateChange,
     ...restProps
   } = props;
 
   validateMaxLength(props);
   validateMaskPlaceholder(props);
 
-  const maskUtils = new MaskUtils({ mask, maskPlaceholder });
+  const maskUtils = new MaskUtils({ formatChars, mask, maskPlaceholder });
 
   const isMasked = !!mask;
   const isEditable = !restProps.disabled && !restProps.readOnly;
@@ -298,6 +299,7 @@ InputMask.displayName = "InputMask";
 
 InputMask.defaultProps = {
   alwaysShowMask: false,
+  formatChars: {},
   maskPlaceholder: "_"
 };
 
@@ -305,6 +307,7 @@ InputMask.propTypes = {
   alwaysShowMask: PropTypes.bool,
   beforeMaskedStateChange: PropTypes.func,
   children: PropTypes.element,
+  formatChars: PropTypes.objectOf(PropTypes.string),
   mask: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(

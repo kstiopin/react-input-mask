@@ -1698,8 +1698,10 @@
 
   var CONTROLLED_PROPS = ["disabled", "onBlur", "onChange", "onFocus", "onMouseDown", "readOnly", "value"];
   var defaultFormatChars = {
+    "#": /[0-9]/,
     "9": /[0-9]/,
     a: /[A-Za-z]/,
+    x: /[A-Za-z]/,
     "*": /[A-Za-z0-9]/
   };
 
@@ -1719,9 +1721,12 @@
   }
 
   function parseMask (_ref) {
-    var mask = _ref.mask,
+    var formatChars = _ref.formatChars,
+        mask = _ref.mask,
         maskPlaceholder = _ref.maskPlaceholder;
     var permanents = [];
+
+    var combinedFormatChars = _extends({}, defaultFormatChars, formatChars);
 
     if (!mask) {
       return {
@@ -1740,7 +1745,7 @@
         if (!isPermanent && character === "\\") {
           isPermanent = true;
         } else {
-          if (isPermanent || !defaultFormatChars[character]) {
+          if (isPermanent || !combinedFormatChars[character]) {
             permanents.push(parsedMaskString.length);
           }
 
@@ -1750,7 +1755,7 @@
       });
       mask = parsedMaskString.split("").map(function (character, index) {
         if (permanents.indexOf(index) === -1) {
-          return defaultFormatChars[character];
+          return combinedFormatChars[character];
         }
 
         return character;
@@ -2112,18 +2117,20 @@
     return InputMaskChildrenWrapper;
   }(React__default.Component);
 
-  var _excluded$1 = ["alwaysShowMask", "children", "mask", "maskPlaceholder", "beforeMaskedStateChange"];
+  var _excluded$1 = ["alwaysShowMask", "beforeMaskedStateChange", "children", "formatChars", "mask", "maskPlaceholder"];
   var InputMask = /*#__PURE__*/React.forwardRef(function InputMask(props, forwardedRef) {
     var alwaysShowMask = props.alwaysShowMask,
+        beforeMaskedStateChange = props.beforeMaskedStateChange,
         children = props.children,
+        formatChars = props.formatChars,
         mask = props.mask,
         maskPlaceholder = props.maskPlaceholder,
-        beforeMaskedStateChange = props.beforeMaskedStateChange,
         restProps = _objectWithoutPropertiesLoose(props, _excluded$1);
 
     validateMaxLength(props);
     validateMaskPlaceholder(props);
     var maskUtils = new MaskUtils({
+      formatChars: formatChars,
       mask: mask,
       maskPlaceholder: maskPlaceholder
     });
@@ -2388,12 +2395,14 @@
   InputMask.displayName = "InputMask";
   InputMask.defaultProps = {
     alwaysShowMask: false,
+    formatChars: {},
     maskPlaceholder: "_"
   };
   InputMask.propTypes = {
     alwaysShowMask: propTypes.bool,
     beforeMaskedStateChange: propTypes.func,
     children: propTypes.element,
+    formatChars: propTypes.objectOf(propTypes.string),
     mask: propTypes.oneOfType([propTypes.string, propTypes.arrayOf(propTypes.oneOfType([propTypes.string, propTypes.instanceOf(RegExp)]))]),
     maskPlaceholder: propTypes.string,
     onFocus: propTypes.func,

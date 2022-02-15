@@ -1,7 +1,8 @@
 import { defaultFormatChars } from "../constants";
 
-export default function({ mask, maskPlaceholder }) {
+export default function({ formatChars, mask, maskPlaceholder }) {
   const permanents = [];
+  const combinedFormatChars = { ...defaultFormatChars, ...formatChars };
 
   if (!mask) {
     return {
@@ -20,7 +21,7 @@ export default function({ mask, maskPlaceholder }) {
       if (!isPermanent && character === "\\") {
         isPermanent = true;
       } else {
-        if (isPermanent || !defaultFormatChars[character]) {
+        if (isPermanent || !combinedFormatChars[character]) {
           permanents.push(parsedMaskString.length);
         }
         parsedMaskString += character;
@@ -30,7 +31,7 @@ export default function({ mask, maskPlaceholder }) {
 
     mask = parsedMaskString.split("").map((character, index) => {
       if (permanents.indexOf(index) === -1) {
-        return defaultFormatChars[character];
+        return combinedFormatChars[character];
       }
       return character;
     });
