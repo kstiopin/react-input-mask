@@ -138,7 +138,8 @@ function useValue(inputRef, initialValue) {
 
   const getValue = useCallback(() => {
     const input = getInputElement();
-    return input.value;
+
+    return input ? input.value : undefined;
   }, [getInputElement]);
 
   const getLastValue = useCallback(() => {

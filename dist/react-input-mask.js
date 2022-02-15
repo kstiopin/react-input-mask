@@ -1531,7 +1531,7 @@
     var valueRef = React.useRef(initialValue);
     var getValue = React.useCallback(function () {
       var input = getInputElement();
-      return input.value;
+      return input ? input.value : undefined;
     }, [getInputElement]);
     var getLastValue = React.useCallback(function () {
       return valueRef.current;
